@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Mini Garden IoT</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            DEFAULT: '#059669',
+                            dark: '#047857',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts (Inter) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+
+        /* Kelas Animasi Scroll (Fade-up & Zoom) */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-b from-slate-950 via-slate-900 to-teal-950 min-h-screen text-slate-200 flex flex-col justify-between selection:bg-emerald-500 selection:text-white">
+
+    <!-- Navbar Minimalis Atas -->
+    <header class="bg-slate-900/80 text-white shadow-sm sticky top-0 z-40 backdrop-blur-md border-b border-slate-800">
+        <div class="max-w-4xl mx-auto px-6 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-2 text-sm font-semibold">
+                <i class="fa-solid fa-seedling text-emerald-400 animate-bounce"></i> Smart Mini Garden IoT
+            </div>
+            
+            <!-- Status Koneksi Blynk -->
+            <div id="connection-status" class="text-xs bg-emerald-950/60 text-emerald-300 border border-emerald-800/60 px-3 py-1.5 rounded-xl font-medium flex items-center gap-2 shadow-sm">
+                <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping" id="status-dot"></span>
+                <span id="status-text">Menghubungkan...</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Konten Utama -->
+    <main class="max-w-4xl w-full mx-auto px-6 py-10 space-y-12">
+        
+        <!-- BAGIAN 1: FOTO TIM PAS & TANPA BINGKAI -->
+        <section class="animate-on-scroll space-y-4 py-2">
+            <div class="max-w-lg mx-auto overflow-hidden aspect-[16/9]">
+                <img src="Member.png" 
+                     alt="Tim Pengembang IoT" 
+                     class="w-full h-full object-cover object-top">
+            </div>
+
+            <div class="space-y-1 px-1 text-center">
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                    Tim Pengembang
+                </h1>
+                <p class="text-sm sm:text-base text-slate-300 leading-relaxed">
+                    Proyek ini dikembangkan oleh <strong class="text-white font-semibold">Edsel, Fidel, dan Rasya</strong>,<br>
+                    siswa jurusan <strong class="text-sky-400 font-semibold">TJKT</strong> dari <strong class="text-white font-semibold">SMK Informatika Al-Irsyad Al-Islamiyyah Cirebon</strong>.
+                </p>
+            </div>
+        </section>
+
+        <!-- BAGIAN 2: PENGENALAN IOT & SISTEM -->
+        <section class="animate-on-scroll flex flex-col lg:flex-row items-center justify-between gap-10 py-6">
+            <div class="space-y-4 text-left flex-1">
+                <div class="inline-flex items-center gap-2 bg-emerald-950/80 text-emerald-300 px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold border border-emerald-800 shadow-sm">
+                    <i class="fa-solid fa-microchip text-emerald-400"></i> Teknologi Sistem
+                </div>
+                
+                <h2 class="text-3xl sm:text-4xl lg:whitespace-nowrap font-extrabold text-white tracking-tight leading-tight">
+                    Smart Mini Garden IoT
+                </h2>
+                
+                <p class="text-base sm:text-lg text-slate-300 leading-relaxed">
+                    Sistem ini memanfaatkan teknologi <strong class="text-sky-400 font-semibold">Internet of Things (IoT)</strong> berbasis mikrokontroler <strong class="text-emerald-400 font-semibold">NodeMCU</strong>. Perangkat sensor memantau tingkat kelembapan tanah secara real-time dan mengaktifkan pompa air secara otomatis untuk menjaga kesuburan tanaman secara efisien.
+                </p>
+            </div>
+
+            <div class="w-full lg:w-[26rem] shrink-0 flex justify-center items-center">
+                <img src="IOT.png" 
+                     alt="IoT Smart Garden Setup" 
+                     class="max-h-[28rem] w-auto object-contain transition duration-500 hover:scale-105">
+            </div>
+        </section>
+
+        <!-- BAGIAN 3: KOMODITAS TANAMAN UNGGULAN -->
+        <section class="animate-on-scroll space-y-4">
+            <div class="border-b border-slate-800 pb-2">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-spa text-emerald-500"></i> Komoditas Tanaman Unggulan
+                </h3>
+                <p class="text-xs text-slate-400">Klik tombol pada gambar tanaman untuk melihat informasi lengkap.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Tanaman Cabai -->
+                <div class="bg-slate-900/80 backdrop-blur-md p-5 rounded-2xl shadow-sm hover:shadow-md border border-slate-800 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1">
+                    <div>
+                        <div onclick="bukaModal('cabai')" class="relative rounded-xl overflow-hidden shadow-sm cursor-pointer group h-48 border border-slate-800">
+                            <img src="Cabe.jpg" 
+                                 alt="Tanaman Cabai" 
+                                 class="w-full h-full object-cover transform group-hover:scale-110 transition duration-500">
+                            
+                            <div class="absolute bottom-3 right-3 bg-emerald-700/90 hover:bg-emerald-800 text-white text-xs px-3 py-1.5 rounded-lg backdrop-blur-md shadow-md transition flex items-center gap-1.5 font-semibold">
+                                <span>Lihat Selengkapnya</span> <i class="fa-solid fa-arrow-right text-[10px] transition-transform group-hover:translate-x-1"></i>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 space-y-1">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-white text-base">Tanaman Cabai</h4>
+                                <span class="text-[10px] bg-red-950/60 text-red-300 px-2.5 py-0.5 rounded-full font-semibold border border-red-900">Kelembapan Stabil</span>
+                            </div>
+                            <p class="text-xs text-slate-400 leading-relaxed">
+                                Cabai membutuhkan suplai air yang konsisten agar pertumbuhan akar maksimal, bunga tidak mudah rontok, dan terhindar dari risiko busuk akar.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tanaman Tomat -->
+                <div class="bg-slate-900/80 backdrop-blur-md p-5 rounded-2xl shadow-sm hover:shadow-md border border-slate-800 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1">
+                    <div>
+                        <div onclick="bukaModal('tomat')" class="relative rounded-xl overflow-hidden shadow-sm cursor-pointer group h-48 border border-slate-800">
+                            <img src="Tomat.jpg" 
+                                 alt="Tanaman Tomat" 
+                                 class="w-full h-full object-cover transform group-hover:scale-110 transition duration-500">
+                            
+                            <div class="absolute bottom-3 right-3 bg-emerald-700/90 hover:bg-emerald-800 text-white text-xs px-3 py-1.5 rounded-lg backdrop-blur-md shadow-md transition flex items-center gap-1.5 font-semibold">
+                                <span>Lihat Selengkapnya</span> <i class="fa-solid fa-arrow-right text-[10px] transition-transform group-hover:translate-x-1"></i>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 space-y-1">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-bold text-white text-base">Tanaman Tomat</h4>
+                                <span class="text-[10px] bg-amber-950/60 text-amber-300 px-2.5 py-0.5 rounded-full font-semibold border border-amber-900">Sensitif Kadar Air</span>
+                            </div>
+                            <p class="text-xs text-slate-400 leading-relaxed">
+                                Tomat sangat peka terhadap fluktuasi kekeringan tanah. Sistem otomatis menjaga kadar air tanah di rentang ideal agar buah tumbuh segar dan manis.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BAGIAN 4: KONFIGURASI BLYNK (Server) -->
+        <section class="animate-on-scroll bg-slate-900/80 backdrop-blur-md p-5 rounded-2xl shadow-sm border border-slate-800 space-y-3">
+            <div class="flex items-center gap-2 text-emerald-400 font-semibold text-xs uppercase tracking-wider">
+                <i class="fa-solid fa-server text-emerald-400"></i>
+                <h2>Server Blynk Cloud (Token Permanen Aktif)</h2>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-2.5">
+                <select id="blynk-server" class="flex-1 border border-slate-700 bg-slate-800/50 rounded-xl px-3 py-2.5 text-xs text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition">
+                    <option value="blynk.cloud">blynk.cloud (Default)</option>
+                    <option value="fra1.blynk.cloud">fra1 (Europe)</option>
+                    <option value="ny3.blynk.cloud">ny3 (New York)</option>
+                    <option value="sgp1.blynk.cloud">sgp1 (Singapore)</option>
+                </select>
+
+                <button onclick="simpanServer()" 
+                    class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-xl text-xs font-semibold shadow-sm transition active:scale-95 flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-rotate"></i> Perbarui Server
+                </button>
+            </div>
+        </section>
+
+        <!-- BAGIAN 5: PANEL MONITORING REAL-TIME -->
+        <section class="animate-on-scroll space-y-3">
+            <div class="flex items-center justify-between">
+                <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-chart-line text-emerald-500"></i> Live Monitoring Sensor
+                </h3>
+                <span class="text-[11px] text-slate-400">Pembaruan otomatis tiap 1 detik</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Kelembapan Udara (Data dari V1) -->
+                <div class="bg-slate-900/80 backdrop-blur-md p-4 rounded-2xl border border-slate-800 flex flex-col justify-between shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <p class="text-[11px] font-bold text-sky-400 uppercase tracking-wider">Kelembapan Udara</p>
+                    <div class="mt-3">
+                        <h4 id="air-humidity" class="text-2xl font-extrabold text-white transition-all">-- <span class="text-sm font-normal text-slate-400">%</span></h4>
+                        <p class="text-[10px] text-slate-400 mt-0.5">Lingkungan sekitar</p>
+                    </div>
+                </div>
+
+                <!-- Suhu Udara (Data dari V0) -->
+                <div class="bg-slate-900/80 backdrop-blur-md p-4 rounded-2xl border border-slate-800 flex flex-col justify-between shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <p class="text-[11px] font-bold text-emerald-400 uppercase tracking-wider">Suhu Udara</p>
+                    <div class="mt-3">
+                        <h4 id="temperature" class="text-2xl font-extrabold text-white transition-all">-- <span class="text-sm font-normal text-slate-400">°C</span></h4>
+                        <p class="text-[10px] text-slate-400 mt-0.5">Pengukuran sensor</p>
+                    </div>
+                </div>
+
+                <!-- Kelembapan Tanah (Data dari V3) -->
+                <div class="bg-slate-900/80 backdrop-blur-md p-4 rounded-2xl border border-slate-800 flex flex-col justify-between shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <p class="text-[11px] font-bold text-teal-400 uppercase tracking-wider">Kelembapan Tanah</p>
+                    <div class="mt-3">
+                        <h4 id="soil-moisture" class="text-2xl font-extrabold text-white transition-all">-- <span class="text-sm font-normal text-slate-400">%</span></h4>
+                        <p class="text-[10px] text-slate-400 mt-0.5">Capacitive soil moisture</p>
+                    </div>
+                </div>
+
+                <!-- Status Pompa (Data dari V2) -->
+                <div class="bg-slate-900/80 backdrop-blur-md p-4 rounded-2xl border border-slate-800 flex flex-col justify-between shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+                    <p class="text-[11px] font-bold text-indigo-400 uppercase tracking-wider">Status Pompa</p>
+                    <div class="mt-3">
+                        <h4 id="pump-status" class="text-sm font-extrabold text-slate-400 transition-all">MENUNGGU</h4>
+                        <p class="text-[10px] text-slate-400 mt-0.5">Penyiraman otomatis</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notes / Catatan Otomatisasi Pompa -->
+            <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 text-xs text-emerald-200 flex flex-col gap-1 shadow-sm">
+                <div class="flex items-center gap-2 font-bold mb-1">
+                    <i class="fa-solid fa-circle-info text-emerald-400 text-sm"></i>
+                    <span>Catatan Sistem Otomatisasi Pompa (NodeMCU & Blynk):</span>
+                </div>
+                <div class="pl-5 space-y-1">
+                    <div>• Jika kelembapan tanah di atas 40%, maka pompa MATI.</div>
+                    <div>• Jika kelembapan tanah di bawah 40%, maka pompa akan NYALA.</div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- POP-UP MODAL INFORMASI TANAMAN -->
+    <div id="modal-tanaman" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden transition-opacity duration-300">
+        <div class="bg-slate-900 w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden relative transform transition-all duration-300 scale-95 max-h-[90vh] flex flex-col border border-slate-800" id="modal-box">
+            
+            <!-- Header Modal -->
+            <div class="bg-slate-800 text-white px-6 py-4 flex justify-between items-center shrink-0">
+                <h3 id="modal-title" class="text-lg font-bold flex items-center gap-2">
+                    <i class="fa-solid fa-circle-info text-emerald-200"></i> Informasi Lengkap Tanaman
+                </h3>
+                <button onclick="tutupModal()" class="w-8 h-8 rounded-full bg-slate-700/60 hover:bg-slate-700 text-emerald-100 hover:text-white flex items-center justify-center transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Isi Konten Modal -->
+            <div class="p-6 overflow-y-auto space-y-6 flex-1 text-slate-300">
+                <div class="rounded-2xl overflow-hidden shadow-inner h-64 border border-slate-800 shrink-0">
+                    <img id="modal-img" src="" alt="Detail Tanaman" class="w-full h-full object-cover">
+                </div>
+
+                <div class="space-y-4">
+                    <div id="modal-badge" class="inline-block text-xs px-3 py-1 rounded-full font-semibold"></div>
+                    <h4 id="modal-subtitle" class="text-xl font-extrabold text-white"></h4>
+                    <p id="modal-desc" class="text-sm text-slate-300 leading-relaxed"></p>
+                    
+                    <div class="space-y-3 pt-2 border-t border-slate-800">
+                        <h5 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+                            <i class="fa-solid fa-seedling text-emerald-500"></i> Panduan & Tips Perawatan Optimal:
+                        </h5>
+                        <p id="modal-tips" class="text-xs text-slate-300 leading-relaxed"></p>
+                    </div>
+
+                    <div class="bg-slate-800/50 border border-slate-700 p-4 rounded-2xl space-y-2">
+                        <h5 class="text-xs font-bold text-emerald-300 uppercase tracking-wider flex items-center gap-1.5">
+                            <i class="fa-solid fa-microchip text-emerald-500"></i> Integrasi Sistem IoT Smart Mini Garden:
+                        </h5>
+                        <p id="modal-iot-info" class="text-xs text-slate-300 leading-relaxed"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Modal -->
+            <div class="bg-slate-800/80 px-6 py-3 border-t border-slate-800 flex justify-end shrink-0">
+                <button onclick="tutupModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 rounded-xl text-xs font-semibold shadow-sm transition">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center py-6 text-xs text-emerald-400 font-medium border-t border-slate-800 bg-slate-900/40 mt-10">
+        Developed by Fidel, Rasya, Edsel
+    </footer>
+
+    <!-- Script Animasi Scroll, Blynk, & Modal -->
+    <script>
+        // Intersection Observer untuk Animasi Scroll dari Atas ke Bawah
+        document.addEventListener("DOMContentLoaded", function() {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.15
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.animate-on-scroll').forEach(section => {
+                observer.observe(section);
+            });
+        });
+
+        const dataTanaman = {
+            cabai: {
+                title: "Tanaman Cabai (Capsicum annuum)",
+                badgeClass: "bg-red-950/60 text-red-300 border border-red-900",
+                badgeText: "Kebutuhan Kelembapan: Stabil (40% - 70%)",
+                img: "Cabe.jpg",
+                desc: "Cabai adalah salah satu tanaman hortikultura strategis yang bernilai ekonomis tinggi di Indonesia. Tanaman ini membutuhkan pengairan yang teratur namun tidak boleh terlalu basah atau tergenang air. Kekurangan pasokan air pada fase berbunga dapat menyebabkan kerontokan bunga dan penurunan hasil panen secara drastis, sementara kelebihan air memicu pembusukan akar.",
+                tips: "Pastikan media tanam memiliki sirkulasi udara dan drainase yang baik. Suhu lingkungan ideal untuk pertumbuhan cabai berkisar antara 21°C hingga 28°C dengan paparan sinar matahari penuh minimal 6 jam sehari untuk merangsang pembuahan yang lebat.",
+                iotInfo: "Melalui sensor kelembapan tanah pada sistem Smart Mini Garden IoT, kadar air di media tanam cabai dipantau secara real-time tanpa henti. Pompa air otomatis akan aktif menyemprotkan air secukupnya begitu tingkat kelembapan mendeteksi kekeringan di bawah batas ideal, sehingga tanaman selalu mendapatkan suplai air yang pas."
+            },
+            tomat: {
+                title: "Tanaman Tomat (Solanum lycopersicum)",
+                badgeClass: "bg-amber-950/60 text-amber-300 border border-amber-900",
+                badgeText: "Kebutuhan Kelembapan: Teratur & Konsisten",
+                img: "Tomat.jpg",
+                desc: "Tomat merupakan tanaman buah kaya nutrisi yang sangat peka terhadap fluktuasi kadar air tanah. Perubahan kelembapan yang terlalu drastis (misalnya dari kondisi sangat kering lalu tiba-tiba disiram terlalu basah) dapat menyebabkan masalah fisiologis serius pada buah, seperti kulit buah pecah-pecah (fruit cracking) atau ujung buah mengalami pembusukan hitam.",
+                tips: "Berikan pupuk organik secara berkala dan jaga kelembapan tanah agar tetap stabil. Tanaman tomat memerlukan intensitas cahaya matahari yang cukup serta perlindungan dari genangan air hujan berlebih untuk mencegah serangan jamur pada daun.",
+                iotInfo: "Sistem IoT Smart Mini Garden memastikan suplai air untuk tomat tetap stabil dan terjaga konsistensinya setiap detik. Sensor membaca kondisi tanah secara akurat dan mengontrol penyiraman otomatis untuk mencegah stres kekeringan pada tanaman, membuat buah tomat tumbuh segar, padat, dan berkualitas tinggi."
+            }
+        };
+
+        function bukaModal(jenis) {
+            const tanaman = dataTanaman[jenis];
+            if (!tanaman) return;
+
+            document.getElementById('modal-title').innerHTML = `<i class="fa-solid fa-circle-info text-emerald-200"></i> Detail Informasi: ${jenis.toUpperCase()}`;
+            document.getElementById('modal-img').src = tanaman.img;
+            
+            const badgeEl = document.getElementById('modal-badge');
+            badgeEl.className = `inline-block text-xs px-3 py-1 rounded-full font-semibold ${tanaman.badgeClass}`;
+            badgeEl.innerText = tanaman.badgeText;
+
+            document.getElementById('modal-subtitle').innerText = tanaman.title;
+            document.getElementById('modal-desc').innerText = tanaman.desc;
+            document.getElementById('modal-tips').innerText = tanaman.tips;
+            document.getElementById('modal-iot-info').innerText = tanaman.iotInfo;
+
+            const modal = document.getElementById('modal-tanaman');
+            const box = document.getElementById('modal-box');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                box.classList.remove('scale-95');
+                box.classList.add('scale-100');
+            }, 10);
+        }
+
+        function tutupModal() {
+            const modal = document.getElementById('modal-tanaman');
+            const box = document.getElementById('modal-box');
+            box.classList.remove('scale-100');
+            box.classList.add('scale-95');
+            modal.classList.add('opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('modal-tanaman');
+            if (event.target === modal) {
+                tutupModal();
+            }
+        }
+
+        // Token Blynk Permanen
+        const BLYNK_TOKEN = "sy4p9SC9SmM0ncjasTSLi0ZPZ76EvkEs";
+        let BLYNK_SERVER = localStorage.getItem('blynk_server') || 'blynk.cloud';
+
+        document.getElementById('blynk-server').value = BLYNK_SERVER;
+        fetchDataBlynk();
+
+        function simpanServer() {
+            const serverInput = document.getElementById('blynk-server').value;
+            localStorage.setItem('blynk_server', serverInput);
+            BLYNK_SERVER = serverInput;
+            alert('Server Blynk berhasil diperbarui!');
+            fetchDataBlynk();
+        }
+
+        async function fetchDataBlynk() {
+            try {
+                let [resTemp, resAirHum, resPump, resSoilHum] = await Promise.all([
+                    fetch(`https://${BLYNK_SERVER}/external/api/get?token=${BLYNK_TOKEN}&v0`),
+                    fetch(`https://${BLYNK_SERVER}/external/api/get?token=${BLYNK_TOKEN}&v1`),
+                    fetch(`https://${BLYNK_SERVER}/external/api/get?token=${BLYNK_TOKEN}&v2`),
+                    fetch(`https://${BLYNK_SERVER}/external/api/get?token=${BLYNK_TOKEN}&v3`)
+                ]);
+
+                if (!resTemp.ok || !resAirHum.ok || !resPump.ok || !resSoilHum.ok) {
+                    throw new Error('Gagal merespons server Blynk');
+                }
+
+                let tempVal = await resTemp.text();
+                let airHumVal = await resAirHum.text();
+                let pumpVal = await resPump.text();
+                let soilHumVal = await resSoilHum.text();
+
+                document.getElementById('temperature').innerHTML = `${tempVal !== "" ? tempVal : '--'} <span class="text-sm font-normal text-slate-400">°C</span>`;
+                document.getElementById('air-humidity').innerHTML = `${airHumVal !== "" ? airHumVal : '--'} <span class="text-sm font-normal text-slate-400">%</span>`;
+                document.getElementById('soil-moisture').innerHTML = `${soilHumVal !== "" ? soilHumVal : '--'} <span class="text-sm font-normal text-slate-400">%</span>`;
+
+                const pumpStatusEl = document.getElementById('pump-status');
+
+                if (pumpVal.trim() === '1') {
+                    pumpStatusEl.innerText = 'NYALA';
+                    pumpStatusEl.className = 'text-sm font-extrabold text-emerald-500 animate-pulse';
+                } else {
+                    pumpStatusEl.innerText = 'MATI';
+                    pumpStatusEl.className = 'text-sm font-extrabold text-rose-500';
+                }
+
+                document.getElementById('status-text').innerText = 'Terhubung';
+                document.getElementById('status-dot').className = 'w-2 h-2 rounded-full bg-emerald-500 animate-pulse';
+
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('status-text').innerText = 'Gagal Terhubung';
+                document.getElementById('status-dot').className = 'w-2 h-2 rounded-full bg-rose-500 animate-pulse';
+            }
+        }
+
+        // Pembaruan otomatis tiap 1 detik
+        setInterval(() => {
+            fetchDataBlynk();
+        }, 1000);
+    </script>
+</body>
+</html>
